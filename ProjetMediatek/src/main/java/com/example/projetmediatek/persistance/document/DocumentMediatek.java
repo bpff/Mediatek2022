@@ -52,7 +52,7 @@ public class DocumentMediatek implements Document
             ResultSet tt = dispo.executeQuery();
             if (!tt.next()) dispon = false;
             dispon = tt.getBoolean("disponible");
-            System.out.println(dispon + titre);
+            System.out.println("Le " + typeDoc + " est " + dispon);
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -77,7 +77,7 @@ public class DocumentMediatek implements Document
             updateEmprunt.setInt(2,idAbo);
             updateEmprunt.setInt(3,this.idDocument);
             int resultat = updateEmprunt.executeUpdate();
-            System.out.println(resultat);
+            System.out.println(resultat + " pour la fonction emprunt");
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -92,7 +92,8 @@ public class DocumentMediatek implements Document
                     " idDocument = ? ");
             req.setInt(1, this.idDocument);
             int resultat = req.executeUpdate();
-            System.out.println(resultat);
+            String toto = resultat == 1 ? "Retour effectué" : "Retour non effectué : problème pour le livre " + this;
+            System.out.println(resultat +" " + toto);
             req.close();
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();

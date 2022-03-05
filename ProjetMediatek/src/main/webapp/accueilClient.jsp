@@ -37,13 +37,13 @@
 <% if(biblio){%>
 <h2 style="color: darkcyan"><%=nomUtilisateur%> est un <%=bbb%></h2>
 <h3>Vous avez donc le droit d'ajouter des documents dans la médiathèque</h3>
-<form>
+<form action="${pageContext.request.contextPath}/AjoutDocument" method="post">
     <div class="form-group">
         <label for="type">Select list:</label>
-        <select class="form-control" id="type">
-            <option>CD</option>
-            <option>DVD</option>
-            <option>Livre</option>
+        <select class="form-control" id="type" name="type">
+            <option value="CD">CD</option>
+            <option value="DVD">DVD</option>
+            <option value="Livre">Livre</option>
         </select>
     </div>
     <div class="form-group">
