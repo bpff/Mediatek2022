@@ -57,9 +57,9 @@ public class Authentification extends HttpServlet {
             Document tt = data.getDocument(18);
             String nomUtilisateur = u.name();
             boolean bibliothecaire = u.isBibliothecaire();
-            request.setAttribute("bibliothecaire",bibliothecaire);
+            session.setAttribute("bibliothecaire",bibliothecaire);
             request.setAttribute("nomUser", nomUtilisateur);
-            request.setAttribute("document3", tt);
+            session.setAttribute("document3", tt);
             RequestDispatcher d = request.getRequestDispatcher("accueilClient.jsp");
             d.forward(request, response);
         }
