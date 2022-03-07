@@ -11,25 +11,11 @@ j
 :src/main/java/com/example/projetmediatek/InitListener.java,3\0\308412a1498d24c803627f56a2767bdc3b6cca72
 K
 src/main/webapp/accueil.jsp,5\b\5b21ef5e85ddae107a036c5544a44217dc80b093
-I
-src/main/webapp/index.jsp,8\e\8e6d3b70c9f5b02570779b0441540d45eceb0ded
 7
 pom.xml,4\4\442292b8a7efeabbe4cc176709b833b1792140ec
-O
-src/main/webapp/testAccueil.jsp,9\0\90cd5407bb1d1f123ab4ea59b339bee4fd6d2727
 i
 9src/main/java/com/example/projetmediatek/TestServlet.java,5\f\5f2200dfa796fd7843c0baf076b7a5073d0d13af
 „
 Tsrc/main/java/com/example/projetmediatek/persistance/utilisateur/Bibliothecaire.java,c\7\c75236de89cdefb395a78f08064e78392f3711f0
 |
 Lsrc/main/java/com/example/projetmediatek/persistance/utilisateur/Abonne.java,b\0\b06ea5590d2d2efa282b70506adb60c0bbed06a5
-ƒ
-Ssrc/main/java/com/example/projetmediatek/persistance/document/DocumentMediatek.java,5\0\500537d5142db368c071da7e1edd4efe287cd565
-w
-Gsrc/main/java/com/example/projetmediatek/services/Authentification.java,1\8\181c639cbb188c5a0d7099e4e26b651c6c5b8194
-Q
-!src/main/webapp/accueilClient.jsp,5\2\524a0b9b72bce0d8d96768505a42893e2f9a3fb3
-t
-Dsrc/main/java/com/example/projetmediatek/services/AjoutDocument.java,c\f\cffe5759d3ff9624333f7bac9771fa9a8a0d5f81
-y
-Isrc/main/java/com/example/projetmediatek/persistance/MediathequeData.java,e\c\ec82c1e05db04b299c9c99a5d0862a430d0f582d

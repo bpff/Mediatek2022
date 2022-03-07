@@ -54,17 +54,12 @@ public class Authentification extends HttpServlet {
         }else{
             session.setAttribute("profil",u);
             session.isNew();
-            Document tt = data.getDocument(14);
-            StringBuilder toto = new StringBuilder();
-            for (Document dd : data.tousLesDocumentsDisponibles()) {
-                toto.append(dd.toString()).append(" ");
-            }
+            Document tt = data.getDocument(18);
             String nomUtilisateur = u.name();
             boolean bibliothecaire = u.isBibliothecaire();
             request.setAttribute("bibliothecaire",bibliothecaire);
             request.setAttribute("nomUser", nomUtilisateur);
             request.setAttribute("document3", tt);
-            request.setAttribute("tousLesDocs", toto.toString());
             RequestDispatcher d = request.getRequestDispatcher("accueilClient.jsp");
             d.forward(request, response);
         }

@@ -1,6 +1,8 @@
-<%@ page import="mediatek2022.Utilisateur" %>
+        <%@ page import="mediatek2022.Utilisateur" %>
 <%@ page import="javax.rmi.CORBA.Util" %>
-<%@ page import="mediatek2022.Document" %><%--
+<%@ page import="mediatek2022.Document" %>
+<%@ page import="java.util.Arrays" %>
+        <%@ page import="mediatek2022.Mediatheque" %><%--
   Created by IntelliJ IDEA.
   User: Elyes
   Date: 27/02/2022
@@ -17,12 +19,11 @@
 <body>
 <%
     Utilisateur u = (Utilisateur) request.getSession().getAttribute("profil");
-    String nomUtilisateur="";
-    if(u == null){
+    String nomUtilisateur = "";
+    if (u == null) {
         response.sendRedirect("index.jsp");
-    }
-    else {
-         nomUtilisateur= (String) request.getAttribute("nomUser");
+    } else {
+        nomUtilisateur = (String) request.getAttribute("nomUser");
         System.out.println(u);
     }
 
@@ -31,13 +32,15 @@
 <h2 style="color: firebrick">Le nom de l'utilisateur est : <%=nomUtilisateur%></h2>
 <h3>Bienvenue dans la médiathèque</h3>
 <%
-   boolean biblio = (boolean) request.getAttribute("bibliothecaire");
-   String bbb = biblio ? "bibliothécaire" : "abonné";
+    boolean biblio = (boolean) request.getAttribute("bibliothecaire");
+    String bbb = biblio ? "bibliothécaire" : "abonné";
 %>
-<% if(biblio){%>
+<% String dee;
+    if (biblio) {%>
 <h2 style="color: darkcyan"><%=nomUtilisateur%> est un <%=bbb%></h2>
 <h3>Vous avez donc le droit d'ajouter des documents dans la médiathèque</h3>
 <form action="${pageContext.request.contextPath}/AjoutDocument" method="post">
+    <div class="col-md-4">
     <div class="form-group">
         <label for="type">Select list:</label>
         <select class="form-control" id="type" name="type">
@@ -55,26 +58,94 @@
         <input type="text" class="form-control" id="auteur" name="auteur" placeholder="Auteur du document">
     </div>
     <button type="submit" class="btn btn-primary">Connexion</button>
+    </div>
 </form>
-<% }else{%>
+<% } else {%>
 <h2 style="color: lemonchiffon;"><%=nomUtilisateur%> est un <%=bbb%></h2>
 <h3>Vous pouvez donc choisir d'emprunter des documents ou alors de retourner un des documents empruntés</h3>
 <h3>Voici tous les documents proposés dans la médiathèque.</h3>
 <%
 
     Document tt = (Document) request.getAttribute("document3");
-    String docs = (String) request.getAttribute("tousLesDocs");
+    StringBuilder totoo = new StringBuilder();
+    for (Document dd : Mediatheque.getInstance().tousLesDocumentsDisponibles()) {
+        totoo.append(dd.toString()).append("");
+    }
 %>
-<h3 style="color: darkgoldenrod;"><%=docs%></h3>
+<h3 style="color: darkgoldenrod;"></h3>
+<h3><%String[] toto = totoo.toString().split("}");%></h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Titre</th>
+        <th scope="col">idDocument</th>
+        <th scope="col">Disponible</th>
+        <th scope="col">idEmprunteur</th>
+        <th scope="col">Type Document</th>
+        <th scope="col">Auteur</th>
+        <th scope="col">Emprunter</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%
+        String[] tousLesLivres= totoo.toString().split("}");
+        System.out.println(Arrays.toString(tousLesLivres));
+        String[] chaqueTitre = new String[tousLesLivres.length];
+        int[] chaqueId = new int[tousLesLivres.length];
+        String[] chaqueDisponible = new String[tousLesLivres.length];
+        String[] chaqueEmprunteur = new String[tousLesLivres.length];
+        String[] chaqueType = new String[tousLesLivres.length];
+        String[] chaqueAuteur = new String[tousLesLivres.length];
+
+        for(int i=0;i< tousLesLivres.length;i++){
+            System.out.println(tousLesLivres[i].split(",")[0].split("=")[1]);
+            chaqueTitre[i] = tousLesLivres[i].split(",")[0].split("=")[1];
+            chaqueId[i] = Integer.parseInt(tousLesLivres[i].split(",")[1].split("=")[1]);
+            chaqueDisponible[i] = tousLesLivres[i].split(",")[2].split("=")[1];
+            chaqueEmprunteur[i] = tousLesLivres[i].split(",")[3].split("=")[1];
+            chaqueType[i] = tousLesLivres[i].split(",")[4].split("=")[1];
+            chaqueAuteur[i] = tousLesLivres[i].split(",")[5].split("=")[1];
+
+        }
+        System.out.println(chaqueTitre[0] + chaqueId[0] + chaqueDisponible[0] + chaqueEmprunteur[0] + chaqueType[0] + chaqueAuteur[0]);
+
+        for (int i=0;i< tousLesLivres.length;i++){
+    %>
+    <tr>
+        <th scope="row"><%=i%></th>
+        <td><%=chaqueTitre[i]%></td>
+        <td><%=chaqueId[i]%></td>
+        <td><%=chaqueDisponible[i]%></td>
+        <td><%=chaqueEmprunteur[i]%></td>
+        <td><%=chaqueType[i]%></td>
+        <td><%=chaqueAuteur[i]%></td>
+        <td><form action="${pageContext.request.contextPath}/Emprunt" method="post">
+            <input id="hidden" name="idDocAEmprunter" value=<%=chaqueId[i]%> type="hidden" >
+            <button type="submit" class="btn btn-primary">Emprunter</button>
+        </form></td>
+    </tr>
+    <%}%>
+    </tbody>
+</table>
 <h3>Voici le document 3</h3>
 <h3 style="color: darkgoldenrod;"><%=tt%></h3>
-<%if(tt.disponible()){%>
-<h3>Le livre est DISPO</h3><%}else{%>
+<%if (tt.disponible()) {%>
+<h3>Le livre est DISPO</h3><%} else {%>
 <h3>Le livre n'est pas dispo</h3>
-<%}}%>
+<%}
+    tt.retour();%>
+<h3><%=tt%></h3><%
+    try {
+        tt.emprunt(u);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+%><%}%>
 
 </body>
 <%--<h2 style="color: aqua">Le nom de l'utilisateur est : <%=nomUtilisateur%></h2>--%>
+
 <%--<h3 style="color:aquamarine;">Le document numero 3 est le suivant : <%=tt.toString()%></h3>--%>
 <%--<h3 style="color: darkgoldenrod;">Tous les docs sont : <%=docs%></h3>--%>
 

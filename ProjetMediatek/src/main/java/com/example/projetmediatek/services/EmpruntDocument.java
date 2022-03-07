@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 
+import javax.rmi.CORBA.Util;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,14 +21,14 @@ import mediatek2022.Utilisateur;
  * Servlet implementation class ServlerRechercheLivres
  */
 
-@WebServlet(name = "AjoutDocument", value = "/AjoutDocument")
-public class AjoutDocument extends HttpServlet {
+@WebServlet(name = "EmpruntDocument", value = "/Emprunt")
+public class EmpruntDocument extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AjoutDocument() {
+    public EmpruntDocument() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -39,30 +40,19 @@ public class AjoutDocument extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Mediatheque data = Mediatheque.getInstance();
         HttpSession session = request.getSession(true);
-        String titre = request.getParameter("titre");
-        String auteur = request.getParameter("auteur");
-        String type = request.getParameter("type");
-        System.out.println(type+ auteur+ titre);
-        int typeDoc;
-        switch (type){
-            case "Livre" :
-                typeDoc = 1;
-                break;
-            case "DVD":
-                typeDoc = 2;
-                break;
-            case "CD":
-                typeDoc = 3;
-                break;
-            default:
-                typeDoc = 4;
+        int iDdocEmprunt = Integer.parseInt(request.getParameter("idDocAEmprunter"));
+        System.out.println(request.getParameter("idDocAEmprunter"));
+        Utilisateur u = (Utilisateur) session.getAttribute("profil");
+        System.out.println(u+" c'est lutilisateur");
+        Document dd = data.getDocument(iDdocEmprunt);
+        try {
+            dd.emprunt(u);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        String toto = "Y'a pas de soucis";
-        System.out.println(toto);
-        data.ajoutDocument(typeDoc, titre, true, auteur,toto);
-        System.out.println(toto);
-        // System.out.println("ESSAI de l'ajout du document");
+        System.out.println(dd);
+
         RequestDispatcher d = request.getRequestDispatcher("accueilClient.jsp");
-            d.forward(request, response);
-        }
+        d.forward(request, response);
     }
+}

@@ -31,14 +31,12 @@ public class DocumentMediatek implements Document
 
     @Override
     public String toString() {
-        return "DocumentMediatek{" +
-                "titre='" + titre + '\'' +
+        return "titre=" + titre +
                 ", idDocument=" + idDocument +
                 ", disponible=" + disponible +
                 ", idEmprunteur=" + idEmprunteur +
-                ", typeDoc='" + typeDoc + '\'' +
-                ", auteur='" + auteur + '\'' +
-                '}';
+                ", typeDoc=" + typeDoc +
+                ", auteur=" + auteur+"}";
     }
 
     @Override
@@ -70,6 +68,7 @@ public class DocumentMediatek implements Document
             recupIdAbo = statement("Select idUtilisateur from utilisateur where login = ?");
             recupIdAbo.setString(1,u.name());
             ResultSet rr = recupIdAbo.executeQuery();
+            if (!rr.next()) System.out.println("y'a rien");;
             int idAbo = rr.getInt("idUtilisateur");
             System.out.println(idAbo);
             updateEmprunt = statement("Update document set disponible = ?, idUtilsateurEmprunt = ? where idDocument = ?");
@@ -77,6 +76,7 @@ public class DocumentMediatek implements Document
             updateEmprunt.setInt(2,idAbo);
             updateEmprunt.setInt(3,this.idDocument);
             int resultat = updateEmprunt.executeUpdate();
+            System.out.println(u.toString() + " a emprunté " + this.toString());
             System.out.println(resultat + " pour la fonction emprunt");
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();

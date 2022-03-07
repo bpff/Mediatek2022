@@ -153,11 +153,14 @@ public class MediathequeData implements PersistentMediatheque {
                     "values ('"+args[0]+"',"+args[1]+",'"+typeDoc+"','"+args[2]+"')";
             //args[0] --> titre, args[1]--> disponibilite,args[2]-->auteur
             int resultat = requeteStatique.executeUpdate(sql);
+            System.out.println(resultat);
             String eee = resultat == 1 ? "réussie" : "pas réussie";
-            System.out.println(resultat + "Ajout du " + typeDoc + " " + args[0] + " avec pour auteur " + args[1] + " " + eee );
+            System.out.println(eee);
+            System.out.println(resultat + "Ajout du " + typeDoc + " " + args[0] + " avec pour auteur " + args[2] + " " + eee );
             requeteStatique.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            args[3] = "Y'a un souci";
+//            e.printStackTrace();
         }
     }
 
