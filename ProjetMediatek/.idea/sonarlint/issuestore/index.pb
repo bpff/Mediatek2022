@@ -19,3 +19,17 @@ i
 Tsrc/main/java/com/example/projetmediatek/persistance/utilisateur/Bibliothecaire.java,c\7\c75236de89cdefb395a78f08064e78392f3711f0
 |
 Lsrc/main/java/com/example/projetmediatek/persistance/utilisateur/Abonne.java,b\0\b06ea5590d2d2efa282b70506adb60c0bbed06a5
+ƒ
+Ssrc/main/java/com/example/projetmediatek/persistance/document/DocumentMediatek.java,5\0\500537d5142db368c071da7e1edd4efe287cd565
+B
+ProjetMediatek.iml,9\e\9e5311e612b200cdde25e68d0e7d323293146615
+Q
+!src/main/webapp/accueilClient.jsp,5\2\524a0b9b72bce0d8d96768505a42893e2f9a3fb3
+I
+src/main/webapp/index.jsp,8\e\8e6d3b70c9f5b02570779b0441540d45eceb0ded
+w
+Gsrc/main/java/com/example/projetmediatek/services/Authentification.java,1\8\181c639cbb188c5a0d7099e4e26b651c6c5b8194
+t
+Dsrc/main/java/com/example/projetmediatek/services/AjoutDocument.java,c\f\cffe5759d3ff9624333f7bac9771fa9a8a0d5f81
+v
+Fsrc/main/java/com/example/projetmediatek/services/EmpruntDocument.java,b\e\be59b01c80a2fd87f89091a870dad02c85fbb52d

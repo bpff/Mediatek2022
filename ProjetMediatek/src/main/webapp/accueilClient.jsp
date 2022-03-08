@@ -2,7 +2,10 @@
 <%@ page import="javax.rmi.CORBA.Util" %>
 <%@ page import="mediatek2022.Document" %>
 <%@ page import="java.util.Arrays" %>
-        <%@ page import="mediatek2022.Mediatheque" %><%--
+        <%@ page import="mediatek2022.Mediatheque" %>
+        <%@ page import="java.util.List" %>
+        <%@ page import="java.util.ArrayList" %>
+        <%@ page import="javax.print.Doc" %><%--
   Created by IntelliJ IDEA.
   User: Elyes
   Date: 27/02/2022
@@ -69,11 +72,10 @@
     Document tt = (Document) request.getSession().getAttribute("document3");
     StringBuilder totoo = new StringBuilder();
     for (Document dd : Mediatheque.getInstance().tousLesDocumentsDisponibles()) {
-        totoo.append(dd.toString()).append("");
+        totoo.append(dd.toString());
     }
 %>
 <h3 style="color: darkgoldenrod;"></h3>
-<h3><%String[] toto = totoo.toString().split("}");%></h3>
 <table class="table table-striped">
     <thead>
     <tr>
@@ -128,6 +130,71 @@
     <%}%>
     </tbody>
 </table>
+<%
+    ArrayList<Document> listeDocsUser = (ArrayList<Document>) u.data()[1];
+    StringBuilder tousleslivresusers = new StringBuilder();
+    for(Document d : listeDocsUser){
+        tousleslivresusers.append(d);
+    }
+%>
+<h3>Voici la liste des documents</h3>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">#</th>
+        <th scope="col">Titre</th>
+        <th scope="col">idDocument</th>
+        <th scope="col">Disponible</th>
+        <th scope="col">idEmprunteur</th>
+        <th scope="col">Type Document</th>
+        <th scope="col">Auteur</th>
+        <th scope="col">Emprunter</th>
+    </tr>
+    </thead>
+    <tbody>
+    <%
+        String[] tousLesLivresUser= tousleslivresusers.toString().split("}");
+        System.out.println(Arrays.toString(tousLesLivresUser));
+        String[] chaqueTitreuser = new String[tousLesLivresUser.length];
+        int[] chaqueIdUser = new int[tousLesLivresUser.length];
+        String[] chaqueDisponibleUser = new String[tousLesLivresUser.length];
+        String[] chaqueEmprunteurUser = new String[tousLesLivresUser.length];
+        String[] chaqueTypeUser = new String[tousLesLivresUser.length];
+        String[] chaqueAuteurUser = new String[tousLesLivresUser.length];
+
+        for(int i=0;i< tousLesLivresUser.length;i++){
+            System.out.println(tousLesLivresUser[i].split(",")[0].split("=")[1]);
+            chaqueTitreuser[i] = tousLesLivresUser[i].split(",")[0].split("=")[1];
+            chaqueIdUser[i] = Integer.parseInt(tousLesLivresUser[i].split(",")[1].split("=")[1]);
+            chaqueDisponibleUser[i] = tousLesLivresUser[i].split(",")[2].split("=")[1];
+            chaqueEmprunteurUser[i] = tousLesLivresUser[i].split(",")[3].split("=")[1];
+            chaqueTypeUser[i] = tousLesLivresUser[i].split(",")[4].split("=")[1];
+            chaqueAuteurUser[i] = tousLesLivresUser[i].split(",")[5].split("=")[1];
+
+        }
+        System.out.println(chaqueTitreuser[0] + chaqueIdUser[0] + chaqueDisponibleUser[0] + chaqueEmprunteurUser[0] + chaqueTypeUser[0] + chaqueAuteurUser[0]);
+
+        for (int i=0;i< tousLesLivresUser.length;i++){
+    %>
+    <tr>
+        <th scope="row"><%=i%></th>
+        <td><%=chaqueTitreuser[i]%></td>
+        <td><%=chaqueIdUser[i]%></td>
+        <td><%=chaqueDisponibleUser[i]%></td>
+        <td><%=chaqueEmprunteurUser[i]%></td>
+        <td><%=chaqueTypeUser[i]%></td>
+        <td><%=chaqueAuteurUser[i]%></td>
+        <td><form action="${pageContext.request.contextPath}/Retour" method="post">
+            <input id="hiddenBis" name="idDocARetourner" value=<%=chaqueIdUser[i]%> type="hidden" >
+            <button type="submit" class="btn btn-primary">Emprunter</button>
+        </form></td>
+    </tr>
+    <%}%>
+    </tbody>
+</table>
+
+<h3><%=tousleslivresusers%></h3>
+<h3><%=listeDocsUser.size()%></h3>
 <h3>Voici le document 3</h3>
 <h3 style="color: darkgoldenrod;"><%=tt%></h3>
 <%if (tt.disponible()) {%>

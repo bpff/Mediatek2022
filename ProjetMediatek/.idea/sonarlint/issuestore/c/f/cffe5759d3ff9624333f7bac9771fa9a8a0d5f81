@@ -1,0 +1,18 @@
+
+M
+java:S1135 "2Complete the task associated to this TODO comment.(ƒŠ® úÿÿÿÿ
+V
+java:S1854)";Remove this useless assignment to local variable "session".(‚­ã¸üÿÿÿÿ
+G
+java:S1481)",Remove this unused "session" local variable.(‚­ã¸üÿÿÿÿ
+Q	java:S125@"<This block of commented-out lines of code should be removed.(˜
+|
+java:S1989B"aHandle the following exceptions that could be thrown by "forward": ServletException, IOException.(ÉÜ‡ôþÿÿÿÿ
+H
+java:S1128"2Remove this unused import 'java.sql.SQLException'.(ÛïÆŸ
+d
+java:S1128"NRemove this unused import 'java.sql.SQLIntegrityConstraintViolationException'.(¤¡†
+M
+java:S1128"2Remove this unused import 'mediatek2022.Document'.(¸Øµþÿÿÿÿ
+K
+java:S1128"5Remove this unused import 'mediatek2022.Utilisateur'.(ÙÔ»ß

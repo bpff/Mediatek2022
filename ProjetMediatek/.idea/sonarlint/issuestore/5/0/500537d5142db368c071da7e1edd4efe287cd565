@@ -1,0 +1,7 @@
+
+2
+java:S1116G"Remove this empty statement.(คๅเม
+‘
+java:S2681G"{This statement will not be executed conditionally; only the first statement will be. The rest will execute unconditionally.(คๅเม
+c
+java:S2095"HUse try-with-resources or close this "Connection" in a "finally" clause.(ร๋ÿÿÿÿÿ
