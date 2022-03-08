@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>JSP - Hello World</title>
-<%--    <link rel="stylesheet" href="./assets/css/style.css">--%>
+    <%--    <link rel="stylesheet" href="./assets/css/style.css">--%>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
@@ -14,23 +14,23 @@
 <div class="container">
     <div class="row justify-content-md-center">
         <div class="col col-md-4">
-<form action="${pageContext.request.contextPath}/Authentification" method="post">
-    <div class="form-group">
-        <label for="name">Login</label>
-        <input type="text" class="form-control" id="name" name="login" aria-describedby="login" placeholder="Entrez votre login">
-        <% String messageErreur = request.getAttribute("erreurUtilisateur") !=null ? (String) request.getAttribute("erreurUtilisateur") : "";
-            String erreur="";
-            if(messageErreur.length()>0){
-                erreur = messageErreur;
-            }%>
-        <small id="loginHelp" class="form-text text-muted" style="color: red"><%=erreur%></small>
-    </div>
-    <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
-    </div>
-    <button type="submit" class="btn btn-primary">Connexion</button>
-</form>
+            <form action="${pageContext.request.contextPath}/Authentification" method="post">
+                <div class="form-group">
+                    <label for="name">Login</label>
+                    <input type="text" class="form-control" id="name" name="login" aria-describedby="login" placeholder="Entrez votre login">
+                    <% String messageErreur = request.getAttribute("erreurUtilisateur") !=null ? (String) request.getAttribute("erreurUtilisateur") : "";
+                        String erreur="";
+                        if(messageErreur.length()>0){
+                            erreur = messageErreur;
+                        }%>
+                    <small id="loginHelp" class="form-text text-muted" style="color: red"><%=erreur%></small>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary">Connexion</button>
+            </form>
         </div>
     </div>
 </div>

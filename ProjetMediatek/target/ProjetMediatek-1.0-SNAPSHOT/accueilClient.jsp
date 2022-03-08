@@ -26,7 +26,7 @@
     if (u == null) {
         response.sendRedirect("index.jsp");
     } else {
-        nomUtilisateur = (String) request.getAttribute("nomUser");
+        nomUtilisateur = u.name();
         System.out.println(u);
     }
 
