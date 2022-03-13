@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import mediatek2022.Document;
 import mediatek2022.Mediatheque;
 import mediatek2022.Utilisateur;
 

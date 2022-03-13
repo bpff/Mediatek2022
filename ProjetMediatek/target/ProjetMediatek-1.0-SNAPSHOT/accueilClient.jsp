@@ -178,7 +178,7 @@
         </div>
     </div>
 </div>
-<hr>
+
 <%}%>
 <%
     ArrayList<Document> listeDocsUser = (ArrayList<Document>) u.data()[1];
