@@ -30,6 +30,16 @@ public class Authentification extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String user = (String) req.getSession(true).getAttribute("profil");
+        if (user == null || user.equals("")) {
+            RequestDispatcher d = req.getRequestDispatcher("index.jsp");
+            d.forward(req,resp);
+        }
+
+    }
+
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
@@ -39,11 +49,7 @@ public class Authentification extends HttpServlet {
         HttpSession session = request.getSession(true);
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-
         Utilisateur u = data.getUser(login,password);
-
-       // System.out.println("ESSAI de l'ajout du document");
-       // data.ajoutDocument(2,"Coucou",true,"ElyesMimo");
         String erreur;
         if(u == null){
             erreur = "L'utilisateur " + login +" n'a pas été trouvé ou le mot de passe est incorrect.";
@@ -53,13 +59,8 @@ public class Authentification extends HttpServlet {
             d.forward(request, response);
         }else{
             session.setAttribute("profil",u);
-            session.isNew();
-            Document tt = data.getDocument(18);
-            String nomUtilisateur = u.name();
             boolean bibliothecaire = u.isBibliothecaire();
             session.setAttribute("bibliothecaire",bibliothecaire);
-            request.setAttribute("nomUser", nomUtilisateur);
-            session.setAttribute("document3", tt);
             RequestDispatcher d = request.getRequestDispatcher("accueilClient.jsp");
             d.forward(request, response);
         }

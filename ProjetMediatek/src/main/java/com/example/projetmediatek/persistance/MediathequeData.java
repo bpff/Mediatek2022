@@ -18,6 +18,7 @@ import java.util.List;
 public class MediathequeData implements PersistentMediatheque {
     // Jean-François Brette 01/01/2018
     private static Connection connection;
+
     static {
         Mediatheque.getInstance().setData(new MediathequeData());
     }
@@ -25,7 +26,7 @@ public class MediathequeData implements PersistentMediatheque {
     private MediathequeData() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mediatek2022","root","root");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mediatek2022", "root", "root");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
@@ -43,17 +44,19 @@ public class MediathequeData implements PersistentMediatheque {
         int idUtilisateurEmprunt;
         Statement requeteStatique = null;
         try {
-            requeteStatique = connection.createStatement();
-            ResultSet tableResultat = requeteStatique.executeQuery
-                    ("SELECT * FROM document where disponible = true");
-            while (tableResultat.next()){
-                idDocument=tableResultat.getInt("idDocument");
-                titreDocument = tableResultat.getString("titreDocument");
-                disponible=tableResultat.getBoolean("disponible");
-                typeDocument = tableResultat.getString("typeDocument");
-                auteur = tableResultat.getString("auteur");
-                idUtilisateurEmprunt = tableResultat.getInt("idUtilsateurEmprunt");
-                listeDocumentsDispos.add(new DocumentMediatek(titreDocument,idDocument,disponible,typeDocument,auteur,idUtilisateurEmprunt));
+            synchronized (connection) {
+                requeteStatique = connection.createStatement();
+                ResultSet tableResultat = requeteStatique.executeQuery
+                        ("SELECT * FROM document where disponible = true");
+                while (tableResultat.next()) {
+                    idDocument = tableResultat.getInt("idDocument");
+                    titreDocument = tableResultat.getString("titreDocument");
+                    disponible = tableResultat.getBoolean("disponible");
+                    typeDocument = tableResultat.getString("typeDocument");
+                    auteur = tableResultat.getString("auteur");
+                    idUtilisateurEmprunt = tableResultat.getInt("idUtilsateurEmprunt");
+                    listeDocumentsDispos.add(new DocumentMediatek(titreDocument, idDocument, disponible, typeDocument, auteur, idUtilisateurEmprunt));
+                }
             }
             requeteStatique.close();
         } catch (SQLException e) {
@@ -74,14 +77,14 @@ public class MediathequeData implements PersistentMediatheque {
             ResultSet result = req.executeQuery();
             if (!result.next()) return null;
             boolean bibliothecaire = result.getBoolean("bibliothecaire");
-            System.out.println(bibliothecaire +" " + result.getString("login") );
-            if(bibliothecaire){
+            System.out.println(bibliothecaire + " " + result.getString("login"));
+            if (bibliothecaire) {
                 return new Bibliothecaire(
                         result.getInt("idUtilisateur"),
                         result.getString("login"),
                         result.getString("password"),
                         result.getInt("age"));
-            }else{
+            } else {
                 return new Abonne(
                         result.getInt("idUtilisateur"),
                         result.getString("login"),
@@ -102,27 +105,29 @@ public class MediathequeData implements PersistentMediatheque {
     public Document getDocument(int numDocument) {
         PreparedStatement req = null;
         try {
-            req = connection.prepareStatement("select * from document where idDocument = ?");
-            req.setInt(1, numDocument);
-            ResultSet result = req.executeQuery();
-            if (!result.next()) return null;
-            return new DocumentMediatek(
-                    result.getString("titreDocument"),
-                    result.getInt("idDocument"),
-                                result.getBoolean("disponible"),
-                                result.getString("typeDocument"),
-                                result.getString("auteur"),
-                                result.getInt("idUtilsateurEmprunt"));
-        }
-
-        catch (SQLException e) {
+            synchronized (connection) {
+                req = connection.prepareStatement("select * from document where idDocument = ?");
+                req.setInt(1, numDocument);
+                ResultSet result = req.executeQuery();
+                if (!result.next()) return null;
+                return new DocumentMediatek(
+                        result.getString("titreDocument"),
+                        result.getInt("idDocument"),
+                        result.getBoolean("disponible"),
+                        result.getString("typeDocument"),
+                        result.getString("auteur"),
+                        result.getInt("idUtilsateurEmprunt"));
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+
         return null;
-        }
+    }
 
     /**
      * ajoute un document dans la BD par le bibliothécaire
+     *
      * @param type le type du document
      * @param args les attributs du document
      */
@@ -131,9 +136,9 @@ public class MediathequeData implements PersistentMediatheque {
         // args[0] -> le titre
         // args [1] --> l'auteur
         // etc... variable suivant le type de document
-        String typeDoc="";
-        switch (type){
-            case 1 :
+        String typeDoc = "";
+        switch (type) {
+            case 1:
                 typeDoc += "Livre";
                 break;
             case 2:
@@ -147,19 +152,20 @@ public class MediathequeData implements PersistentMediatheque {
         }
         Statement requeteStatique = null;
         try {
-            requeteStatique = connection.createStatement();
-            System.out.println("Insertion des données");
-            String sql = "insert into document(titreDocument, disponible, typeDocument, auteur) " +
-                    "values ('"+args[0]+"',"+args[1]+",'"+typeDoc+"','"+args[2]+"')";
-            //args[0] --> titre, args[1]--> disponibilite,args[2]-->auteur
-            int resultat = requeteStatique.executeUpdate(sql);
-            System.out.println(resultat);
-            String eee = resultat == 1 ? "réussie" : "pas réussie";
-            System.out.println(eee);
-            System.out.println(resultat + "Ajout du " + typeDoc + " " + args[0] + " avec pour auteur " + args[2] + " " + eee );
-            requeteStatique.close();
+            synchronized (connection) {
+                requeteStatique = connection.createStatement();
+                System.out.println("Insertion des données");
+                String sql = "insert into document(titreDocument, disponible, typeDocument, auteur) " +
+                        "values ('" + args[0] + "'," + args[1] + ",'" + typeDoc + "','" + args[2] + "')";
+                //args[0] --> titre, args[1]--> disponibilite,args[2]-->auteur
+                int resultat = requeteStatique.executeUpdate(sql);
+                System.out.println(resultat);
+                String reussi = resultat == 1 ? "réussie" : "pas réussie";
+                System.out.println(reussi);
+                System.out.println(resultat + "Ajout du " + typeDoc + " " + args[0] + " avec pour auteur " + args[2] + " " + reussi);
+                requeteStatique.close();
+            }
         } catch (SQLException e) {
-            args[3] = "Y'a un souci";
 //            e.printStackTrace();
         }
     }

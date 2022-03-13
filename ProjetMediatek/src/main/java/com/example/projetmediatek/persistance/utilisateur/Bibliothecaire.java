@@ -4,10 +4,10 @@ import mediatek2022.Utilisateur;
 
 public class Bibliothecaire implements Utilisateur {
 
-    private int idUtilisateur;
-    private String login;
-    private String password;
-    private int age;
+    private final int idUtilisateur;
+    private final String login;
+    private final String password;
+    private final int age;
 
     public Bibliothecaire(int idUtilisateur, String login, String password, int age) {
         this.idUtilisateur = idUtilisateur;

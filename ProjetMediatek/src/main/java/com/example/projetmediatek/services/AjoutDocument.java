@@ -1,8 +1,7 @@
 package com.example.projetmediatek.services;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
+import mediatek2022.Mediatheque;
+import mediatek2022.Utilisateur;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,10 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
-import mediatek2022.Document;
-import mediatek2022.Mediatheque;
-import mediatek2022.Utilisateur;
 
 /**
  * Servlet implementation class ServlerRechercheLivres
@@ -32,20 +29,27 @@ public class AjoutDocument extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Utilisateur user = (Utilisateur) req.getSession(true).getAttribute("profil");
+        if (user == null || user.toString().equals("")) {
+            resp.sendRedirect(req.getContextPath() + "/Authentification");
+        }
+    }
+
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Mediatheque data = Mediatheque.getInstance();
-        HttpSession session = request.getSession(true);
         String titre = request.getParameter("titre");
         String auteur = request.getParameter("auteur");
         String type = request.getParameter("type");
-        System.out.println(type+ auteur+ titre);
+        System.out.println(type +" " + auteur + " " + titre);
         int typeDoc;
-        switch (type){
-            case "Livre" :
+        switch (type) {
+            case "Livre":
                 typeDoc = 1;
                 break;
             case "DVD":
@@ -57,12 +61,23 @@ public class AjoutDocument extends HttpServlet {
             default:
                 typeDoc = 4;
         }
-        String toto = "Y'a pas de soucis";
-        System.out.println(toto);
-        data.ajoutDocument(typeDoc, titre, true, auteur,toto);
-        System.out.println(toto);
-        // System.out.println("ESSAI de l'ajout du document");
-        RequestDispatcher d = request.getRequestDispatcher("accueilClient.jsp");
+        boolean invalide = false;
+        String erreur = "";
+        String success = "";
+        if (titre == null || auteur == null || titre.length() == 0 || titre.length() == 0) {
+            invalide = true;
+        }
+        if (invalide) {
+            erreur = "Veuillez remplir tous les champs";
+            request.setAttribute("erreur", erreur);
+            RequestDispatcher d = request.getRequestDispatcher("accueilClient.jsp");
+            d.forward(request, response);
+        } else {
+            data.ajoutDocument(typeDoc, titre, true, auteur);
+            success = type + " " + titre + " ajouté avec succès dans la médiathèque";
+            request.setAttribute("succes", success);
+            RequestDispatcher d = request.getRequestDispatcher("accueilClient.jsp");
             d.forward(request, response);
         }
     }
+}

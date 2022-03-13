@@ -1,10 +1,9 @@
 package com.example.projetmediatek.services;
 
-import java.io.IOException;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
+import mediatek2022.Document;
+import mediatek2022.Mediatheque;
+import mediatek2022.Utilisateur;
 
-import javax.rmi.CORBA.Util;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,10 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import mediatek2022.Document;
-import mediatek2022.Mediatheque;
-import mediatek2022.Utilisateur;
+import java.io.IOException;
 
 /**
  * Servlet implementation class ServlerRechercheLivres
@@ -33,6 +29,14 @@ public class RetourDocument extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Utilisateur user = (Utilisateur) req.getSession(true).getAttribute("profil");
+        if (user == null || user.toString().equals("")) {
+            resp.sendRedirect(req.getContextPath() + "/Authentification");
+        }
+    }
+
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
@@ -40,17 +44,17 @@ public class RetourDocument extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Mediatheque data = Mediatheque.getInstance();
         HttpSession session = request.getSession(true);
-        int iDdocEmprunt = Integer.parseInt(request.getParameter("idDocARetourner"));
+        int docARetourner = Integer.parseInt(request.getParameter("idDocARetourner"));
         System.out.println(request.getParameter("idDocARetourner"));
         Utilisateur u = (Utilisateur) session.getAttribute("profil");
-        System.out.println(u+" c'est lutilisateur");
-        Document dd = data.getDocument(iDdocEmprunt);
+        System.out.println(u + " est l'utilisateur qui veut retourner");
+        Document documentARetourner = data.getDocument(docARetourner);
         try {
-            dd.retour();
+            documentARetourner.retour();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println(dd);
+        System.out.println(documentARetourner +" a été retourné");
 
         RequestDispatcher d = request.getRequestDispatcher("accueilClient.jsp");
         d.forward(request, response);

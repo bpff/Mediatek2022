@@ -1,21 +1,16 @@
 .btn {
-    margin: 0px 10px;
-    margin-bottom: 20px;
-}
-
-.btn {
-    border-radius: 0;
+  margin: 0px 10px 20px;
 }
 
 .btn.focus, .btn:focus, .btn:hover {
-    color: #ffffff;
-    text-decoration: none;
-    background-color: #1485ee;
-    border: none;
+  color: #ffffff;
+  text-decoration: none;
+  background-color: #1485ee;
+  border: none;
 }
 
 .btn {
-    font-family: 'Roboto';
-    font-weight: 400;
+  font-family: 'Roboto', serif;
+  font-weight: 400;
 }
 

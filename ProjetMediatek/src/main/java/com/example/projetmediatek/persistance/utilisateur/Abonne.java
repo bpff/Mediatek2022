@@ -4,17 +4,17 @@ import com.example.projetmediatek.persistance.document.DocumentMediatek;
 import mediatek2022.Document;
 import mediatek2022.Utilisateur;
 
-import javax.print.Doc;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Abonne implements Utilisateur {
 
-    private int idUtilisateur;
-    private String login;
-    private String password;
-    private int age;
+    private final int idUtilisateur;
+    private final String login;
+    private final String password;
+    private final int age;
+    private static Connection connection;
 
 
     public Abonne(int idUtilisateur, String login, String password, int age) {
@@ -24,10 +24,10 @@ public class Abonne implements Utilisateur {
         this.age = age;
     }
 
-    private PreparedStatement statement(String sql) throws SQLException, ClassNotFoundException{
+    private PreparedStatement statement(String sql) throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mediatek2022","root","root");
-        return connection.prepareStatement(sql);
+        Abonne.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mediatek2022", "root", "root");
+        return Abonne.connection.prepareStatement(sql);
     }
 
     @Override
@@ -58,20 +58,21 @@ public class Abonne implements Utilisateur {
         // Mise en place de la requête pour retourner la liste des documents de l'utilisateur
         PreparedStatement dispo = null;
         List<Document> listeDocsUtilisateur = new ArrayList<>();
-        try{
+        try {
             dispo = statement("Select * from document where idUtilsateurEmprunt = ?");
-            dispo.setInt(1,this.idUtilisateur);
+            dispo.setInt(1, this.idUtilisateur);
             System.out.println(this.login + " utilisateur accede à sa liste de documents");
+            synchronized (Abonne.connection){
             ResultSet tt = dispo.executeQuery();
-            while(tt.next()){
+            while (tt.next()) {
                 int idDoc = Integer.parseInt(tt.getString("idDocument"));
                 String nom = tt.getString("titreDocument");
                 String typeDoc = tt.getString("typeDocument");
                 String auteur = tt.getString("auteur");
-                Document document =   new DocumentMediatek(nom,idDoc,false,typeDoc,auteur,this.idUtilisateur);
+                Document document = new DocumentMediatek(nom, idDoc, false, typeDoc, auteur, this.idUtilisateur);
 
                 listeDocsUtilisateur.add(document);
-
+            }
             }
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -79,4 +80,5 @@ public class Abonne implements Utilisateur {
         tabInformationsUser[1] = listeDocsUtilisateur;
         return tabInformationsUser;
     }
+
 }
