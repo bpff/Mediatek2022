@@ -31,7 +31,7 @@ public class RetourDocument extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Utilisateur user = (Utilisateur) req.getSession(true).getAttribute("profil");
+        Utilisateur user = (Utilisateur) req.getSession().getAttribute("profil");
         if (user == null || user.toString().equals("")) {
             resp.sendRedirect(req.getContextPath() + "/Authentification");
         }

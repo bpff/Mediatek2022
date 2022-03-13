@@ -71,27 +71,28 @@ public class MediathequeData implements PersistentMediatheque {
     public Utilisateur getUser(String login, String password) {
         PreparedStatement req = null;
         try {
-            req = connection.prepareStatement("select * from utilisateur where login = ? and password = ?");
-            req.setString(1, login);
-            req.setString(2, password);
-            ResultSet result = req.executeQuery();
-            if (!result.next()) return null;
-            boolean bibliothecaire = result.getBoolean("bibliothecaire");
-            System.out.println(bibliothecaire + " " + result.getString("login"));
-            if (bibliothecaire) {
-                return new Bibliothecaire(
-                        result.getInt("idUtilisateur"),
-                        result.getString("login"),
-                        result.getString("password"),
-                        result.getInt("age"));
-            } else {
-                return new Abonne(
-                        result.getInt("idUtilisateur"),
-                        result.getString("login"),
-                        result.getString("password"),
-                        result.getInt("age"));
+            synchronized (connection) {
+                req = connection.prepareStatement("select * from utilisateur where login = ? and password = ?");
+                req.setString(1, login);
+                req.setString(2, password);
+                ResultSet result = req.executeQuery();
+                if (!result.next()) return null;
+                boolean bibliothecaire = result.getBoolean("bibliothecaire");
+                System.out.println(bibliothecaire + " " + result.getString("login"));
+                if (bibliothecaire) {
+                    return new Bibliothecaire(
+                            result.getInt("idUtilisateur"),
+                            result.getString("login"),
+                            result.getString("password"),
+                            result.getInt("age"));
+                } else {
+                    return new Abonne(
+                            result.getInt("idUtilisateur"),
+                            result.getString("login"),
+                            result.getString("password"),
+                            result.getInt("age"));
+                }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

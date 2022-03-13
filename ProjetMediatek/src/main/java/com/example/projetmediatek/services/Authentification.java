@@ -59,8 +59,6 @@ public class Authentification extends HttpServlet {
             d.forward(request, response);
         }else{
             session.setAttribute("profil",u);
-            boolean bibliothecaire = u.isBibliothecaire();
-            session.setAttribute("bibliothecaire",bibliothecaire);
             RequestDispatcher d = request.getRequestDispatcher("accueilClient.jsp");
             d.forward(request, response);
         }

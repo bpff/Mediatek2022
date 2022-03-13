@@ -40,7 +40,7 @@
         nomUtilisateur = u.name();
         System.out.println(u);
     }
-    boolean biblio = (boolean) request.getSession().getAttribute("bibliothecaire");
+    boolean biblio = u.isBibliothecaire();
     String bibliothecaire = biblio ? "bibliothécaire" : "abonné";
 
 %>
@@ -48,8 +48,6 @@
     <div class="container"><a class="navbar-brand">Mediatek2022</a><button data-bs-toggle="collapse" data-bs-target="#navbarResponsive" class="navbar-toggler navbar-toggler-right" type="button" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-align-justify"></i></button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto">
-                <%--                <li class="nav-item"><a class="nav-link" href="#about">About</a></li>--%>
-                <%--                <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>--%>
                     <li class="nav-item"><a class="nav-link">Bienvenue <%=nomUtilisateur%></a></li>
                 <li class="nav-item"><a class="nav-link">Espace <%=bibliothecaire%></a></li>
                 <li class="nav-item"><a class="nav-link" href="${pageContext.request.contextPath}/Deconnexion">Deconnexion</a></li>
@@ -57,10 +55,8 @@
         </div>
     </div>
 </nav>
-<%--<form action="${pageContext.request.contextPath}/Deconnexion" method="post">--%>
-<%--    <button type="submit" class="btn btn-primary">Deconnexion</button>--%>
-<%--</form>--%>
-<%if (biblio) {%>
+
+<%if (u.isBibliothecaire()) {%>
 <h3 class="text-center text-muted">Bienvenue dans l'espace bibliothécaire, vous pouvez ajouter des documents dans la médiathèque pour proposer plus de contenu à nos abonnés.</h3>
 <hr>
 <div class="container">
@@ -136,7 +132,6 @@
     <tbody>
     <%
         String[] tousLesLivres = tousLesDocsEmpruntables.toString().split("}");
-        System.out.println(Arrays.toString(tousLesLivres));
         String[] chaqueTitre = new String[tousLesLivres.length];
         int[] chaqueId = new int[tousLesLivres.length];
         String[] chaqueDisponible = new String[tousLesLivres.length];
@@ -145,7 +140,6 @@
         String[] chaqueAuteur = new String[tousLesLivres.length];
 
         for (int i = 0; i < tousLesLivres.length; i++) {
-            System.out.println(tousLesLivres[i].split(",")[0].split("=")[1]);
             chaqueTitre[i] = tousLesLivres[i].split(",")[0].split("=")[1];
             chaqueId[i] = Integer.parseInt(tousLesLivres[i].split(",")[1].split("=")[1]);
             chaqueDisponible[i] = tousLesLivres[i].split(",")[2].split("=")[1];
@@ -184,7 +178,7 @@
         </div>
     </div>
 </div>
-<hr>
+
 <%}%>
 <%
     ArrayList<Document> listeDocsUser = (ArrayList<Document>) u.data()[1];
@@ -194,6 +188,7 @@
     }
     if(listeDocsUser.isEmpty()){
 %>
+<hr>
 <h5 class="text-center text-muted">Vous n'avez pas encore loué de documents, qu'attendez vous ?</h5>
 <%}else{%>
 <h5 class="text-center text-muted">Voici la liste de vos documents</h5>
@@ -216,7 +211,7 @@
     <tbody>
     <%
         String[] tousLesLivresUser = tousleslivresusers.toString().split("}");
-        System.out.println(Arrays.toString(tousLesLivresUser));
+
         String[] chaqueTitreuser = new String[tousLesLivresUser.length];
         int[] chaqueIdUser = new int[tousLesLivresUser.length];
         String[] chaqueDisponibleUser = new String[tousLesLivresUser.length];
@@ -225,7 +220,7 @@
         String[] chaqueAuteurUser = new String[tousLesLivresUser.length];
 
         for (int i = 0; i < tousLesLivresUser.length; i++) {
-            System.out.println(tousLesLivresUser[i].split(",")[0].split("=")[1]);
+
             chaqueTitreuser[i] = tousLesLivresUser[i].split(",")[0].split("=")[1];
             chaqueIdUser[i] = Integer.parseInt(tousLesLivresUser[i].split(",")[1].split("=")[1]);
             chaqueDisponibleUser[i] = tousLesLivresUser[i].split(",")[2].split("=")[1];

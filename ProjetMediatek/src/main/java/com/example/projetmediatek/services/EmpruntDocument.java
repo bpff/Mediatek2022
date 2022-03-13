@@ -31,7 +31,7 @@ public class EmpruntDocument extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Utilisateur user = (Utilisateur) req.getSession(true).getAttribute("profil");
+        Utilisateur user = (Utilisateur) req.getSession().getAttribute("profil");
         if (user == null || user.toString().equals("")) {
             resp.sendRedirect(req.getContextPath() + "/Authentification");
         }
@@ -45,7 +45,6 @@ public class EmpruntDocument extends HttpServlet {
         Mediatheque data = Mediatheque.getInstance();
         HttpSession session = request.getSession(true);
         int iDdocEmprunt = Integer.parseInt(request.getParameter("idDocAEmprunter"));
-        System.out.println(request.getParameter("idDocAEmprunter"));
         Utilisateur u = (Utilisateur) session.getAttribute("profil");
         System.out.println(u + " est l'utilisateur qui veut emprunter");
         Document document = data.getDocument(iDdocEmprunt);

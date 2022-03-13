@@ -26,7 +26,7 @@ public class Deconnexion extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.getSession().invalidate();
-        req.getSession().setAttribute("profil",null);
+        req.getSession(false);
         resp.sendRedirect(req.getContextPath() + "/Authentification");
         // RequestDispatcher d = req.getRequestDispatcher("index.jsp");
         // d.forward(req,resp);
